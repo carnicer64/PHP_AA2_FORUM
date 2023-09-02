@@ -32,7 +32,7 @@ session_start();
     ?>
     <div class="col-md-3 text-end">
         <a href="/NewForum-PHP/view/login.php"  type="button" class="btn btn-outline-primary me-2">Login</a>
-        <a href="/NewForum-PHP/view/register.php"  type="button" class="btn btn-primary me-2">Sign in</a>
+        <a href="/NewForum-PHP/view/registerUser.php"  type="button" class="btn btn-primary me-2">Sign in</a>
     </div>
     <?php
     }

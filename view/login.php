@@ -30,24 +30,35 @@ if(isset($_GET["login"])){
 } else {
 ?>
 <body>
-<h2>Iniciar Sesion</h2>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-    <?php
-    if (isset($_GET["errorLogin"])){?>
-        <div class="alert alert-primary" role="alert">
-            Ha habido un error en el login
-        </div>
-        <?php
-    }
-    ?>
-    <label for="username">Username:</label>
-    <input type="text" name="username" id="username" required <?php echo (isset($_POST["username"]) ? 'value="'.$_POST["username"].'"' : ''); ?>><br>
-    <label for="password">Password:</label>
-    <input type="password" name="password" id="password" required><br>
-    <input type="submit" name="login" value="Login">
-</form>
-
-<p>¿Aún no estás registrado? <a class="log-reg" href="register.php">Registrarse</a></p>
+    <h1 class="text-center">Login</h1>
+    <div class="d-flex justify-content-center align-items-center vh-50">
+        <div class="card p-4 bg-light">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <?php
+                if (isset($_GET["errorLogin"])){?>
+                    <div class="alert alert-primary" role="alert">
+                        ERROR in login.
+                    </div>
+                    <?php
+                }
+                ?>
+                <div class="form-group text-left">
+                    <label for="usuario">Username:</label>
+                    <input type="text" class="form-control" name="username" id="username" required <?php echo (isset($_POST["username"]) ? 'value="'.$_POST["username"].'"' : ''); ?>><br>
+                </div>
+                <div class="form-group text-left">
+                    <label for="clave">Password:</label>
+                    <input type="password" class="form-control" name="password" id="password" required><br>
+                </div>
+                <div class="form-group text-left">
+                    <input type="submit" name="login" value="Login" class="btn btn-success">
+                </div>
+            </form>
+            <div class="mt-2">
+                <a class="" href="registerUser.php" >New user register</a><br>
+            </div>
+        </div><!--card-->
+    </div>
 <?php
 }
 ?>

@@ -25,8 +25,29 @@ if ($thread != null){
             <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                 <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"></use></svg>
             </div>
-            <h3 class="fs-2 text-body-emphasis">USER: <?php echo $userController->getUserName($tem["userID"])["username"]; ?></h3>
+            <h3 class="fs-4 text-body-emphasis">USER: <?php echo $userController->getUserName($tem["userID"])["username"]; ?></h3>
             <p><?php echo $tem['message'] ?></p>
+            <?php
+            if(isset($_SESSION["user"])){
+                if(isset($_SESSION["role"])){
+                    if($_SESSION["role"] == "admin"){
+                        ?>
+                        <div class="py-2">
+                            <a class="btn btn-sm btn-outline-primary" href="deletePost.php?threadID=<?php echo $thread->getThreadID(); ?>&postID=<?php echo $tem["postId"]; ?>">Delete post</a>
+                            <a class="btn btn-sm btn-outline-primary" href="registerPost.php?threadID=<?php echo $thread->getThreadID(); ?>&edit=true&message=<?php echo $tem["message"]; ?>&postID=<?php echo $tem["postId"]; ?>">Edit post</a>
+                        </div>
+                            <?php
+                    } elseif ($_SESSION["role"] == "user"){
+                        if($_SESSION["userID"] == $tem["userID"]){
+                            ?>
+                            <a class="btn btn-sm btn-outline-primary" href="deletePost.php?threadID=<?php echo $thread->getThreadID(); ?>&postID=<?php echo $tem["postId"]; ?>">Delete post</a>
+                            <a class="btn btn-sm btn-outline-primary" href="registerPost.php?threadID=<?php echo $thread->getThreadID(); ?>&edit=true&message=<?php echo $tem["message"]; ?>&postID=<?php echo $tem["postId"]; ?>">Edit post</a>
+                            <?php
+                        }
+                    }
+                }
+            }
+            ?>
         </div>
         <?php endforeach;
         } else { ?>
@@ -46,6 +67,14 @@ if ($thread != null){
         </div>
         <?php } ?>
     </div>
+    <?php
+    if(isset($_SESSION["user"])){?>
+        <div>
+            <a class="btn btn-sm btn-outline-primary" href="registerPost.php?threadID=<?php echo $thread->getThreadID(); ?>">New Post</a>
+        </div>
+    <?php
+    }
+    ?>
 </div>
 </body>
 </html>

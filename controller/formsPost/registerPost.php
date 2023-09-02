@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST["register"])){
+if(isset($_POST["registerPost"])){
     $message = [];
     $passwordBuffer = "";
     foreach($_POST as $key=>$value){
@@ -7,18 +7,8 @@ if(isset($_POST["register"])){
         $value = trim($value);
         // si el campo está vacío
         if($value == "") {
-            $message[] = '<p class="error-form"> <b>' . $key . '</b> can not be null</p>'; // asigna mensaje de error
+            $message[] = '<p class="error-form"> <b>' . $key . '</b> can not be empty</p>'; // asigna mensaje de error
             $validation = false;
-        }
-        if($key == "password"){
-            $passwordBuffer = $value;
-        }
-
-        if($key == "password2"){
-            if($passwordBuffer != $value){
-                $message[] = '<p class="error-form">Passwords doesnt match</p>'; // asigna mensaje de error
-                $validation = false;
-            }
         }
     }// end foreach
     foreach ($message as $fruta) {
@@ -26,7 +16,7 @@ if(isset($_POST["register"])){
     }
 
     if($validation){
-        $response = $controller->registerUser($_POST["username"],$_POST["password"],$_POST["name"],$_POST["email"]);
+        $response = $controller->registerPost($_POST["message"],$_POST["userID"],$_POST["threadID"]);
         //Si ya existe el alias o si ocurre un error al ejecutar la consulta vuelve a seccion registrar y muestra el mensaje.
         if(gettype($response) == "string"){
             $_SESSION["formdata"] = $_POST;
@@ -34,7 +24,7 @@ if(isset($_POST["register"])){
             echo $response;
         }else{
             $_SESSION["formdata"] = $_POST;
-            header("Location:". $_SERVER['PHP_SELF']."?register=correct");
+            header("Location:". $_SERVER['PHP_SELF']."?postRegister=correct&threadID=".$_POST["threadID"]);
         }
         // si validación es false...
     }else{

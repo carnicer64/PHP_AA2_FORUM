@@ -1,24 +1,14 @@
 <?php
-if(isset($_POST["register"])){
+if(isset($_POST["editThread"])) {
     $message = [];
     $passwordBuffer = "";
-    foreach($_POST as $key=>$value){
+    foreach ($_POST as $key => $value) {
         //elimina los espacios del principio y final.
         $value = trim($value);
         // si el campo está vacío
-        if($value == "") {
-            $message[] = '<p class="error-form"> <b>' . $key . '</b> can not be null</p>'; // asigna mensaje de error
+        if ($value == "") {
+            $message[] = '<p class="error-form"> <b>' . $key . '</b> can not be empty</p>'; // asigna mensaje de error
             $validation = false;
-        }
-        if($key == "password"){
-            $passwordBuffer = $value;
-        }
-
-        if($key == "password2"){
-            if($passwordBuffer != $value){
-                $message[] = '<p class="error-form">Passwords doesnt match</p>'; // asigna mensaje de error
-                $validation = false;
-            }
         }
     }// end foreach
     foreach ($message as $fruta) {
@@ -26,7 +16,7 @@ if(isset($_POST["register"])){
     }
 
     if($validation){
-        $response = $controller->registerUser($_POST["username"],$_POST["password"],$_POST["name"],$_POST["email"]);
+        $response = $controller->editThread($_POST["threadID"],$_POST["name"],$_POST["message"]);
         //Si ya existe el alias o si ocurre un error al ejecutar la consulta vuelve a seccion registrar y muestra el mensaje.
         if(gettype($response) == "string"){
             $_SESSION["formdata"] = $_POST;
@@ -34,11 +24,14 @@ if(isset($_POST["register"])){
             echo $response;
         }else{
             $_SESSION["formdata"] = $_POST;
-            header("Location:". $_SERVER['PHP_SELF']."?register=correct");
+
+            //PUEDE DAR PROBLEMAS
+            header("Location:". $_SERVER['PHP_SELF']."?threadRegister=correct&topicID=".$_POST["topicID"]);
         }
         // si validación es false...
     }else{
         $_SESSION["formdata"] = $_POST; // almacena datos enviados por formulario
         $_SESSION["errorMessage"] = $message; //almacena mensaje de error.
-    }// end if validacion. registrar
-}// end if(isset($_POST["registrar"]))
+    }
+
+}

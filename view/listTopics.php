@@ -11,6 +11,19 @@ include("header.php");
         <h3>Topic list
     </div>
 </div>
+<?php
+if(isset($_SESSION["user"])){
+    if(isset($_SESSION["role"])){
+        if($_SESSION["role"] == "admin"){
+    ?>
+<div class="px-5">
+    <a class="btn btn-sm btn-outline-primary" href="">New Topic</a>
+</div>
+    <?php
+        }
+    }
+}
+?>
 
 <div class="album py-5 bg-body-tertiary">
     <div class="container">

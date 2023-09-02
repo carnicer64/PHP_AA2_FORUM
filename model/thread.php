@@ -160,5 +160,65 @@ class thread {
         }
     }
 
+    function newThread($name, $message, $userID, $topicID) {
+        try {
+            $connection = BDConnection::ConnectBD();
+
+            if (gettype($connection) == "string") {
+                return $connection;
+            }
+            $sql = "INSERT INTO threads (name, message, userID, threadID) VALUES (:name,:message,:userID,:threadID)";
+            // Control de inyeccion
+            $response = $connection->prepare($sql);
+
+            $response->execute(array(":name"=> $name,":message" => $message, ":userID" => $userID, ":threadID" => "$threadID"));
+
+            $connection = null;
+            return  $response;
+        } catch (PDOException $e){
+            return BDConnection::mensajes($e->getCode());
+        }
+    }
+
+    function editThread($threadID, $name, $message) {
+        try {
+            $connection = BDConnection::ConnectBD();
+
+            if (gettype($connection) == "string") {
+                return $connection;
+            }
+            $sql = "UPDATE threads SET name = :name AND message = :message WHERE threadId = :threadID";
+            // Control de inyeccion
+            $response = $connection->prepare($sql);
+
+            $response->execute(array(":name"=> $name, ":message" => $message, ":threadID" => $threadID));
+
+            $connection = null;
+            return  $response;
+        } catch (PDOException $e){
+            return BDConnection::mensajes($e->getCode());
+        }
+    }
+
+    function deleteThread($threadID) {
+        try {
+            $connection = BDConnection::ConnectBD();
+
+            if (gettype($connection) == "string") {
+                return $connection;
+            }
+            $sql = "DELETE FROM threads WHERE threadId = :threadID";
+            // Control de inyeccion
+            $response = $connection->prepare($sql);
+
+            $response->execute(array(":threadID" => $threadID));
+
+            $connection = null;
+            return  $response;
+        } catch (PDOException $e){
+            return BDConnection::mensajes($e->getCode());
+        }
+    }
+
 
 }

@@ -2,7 +2,7 @@
 require_once '../model/BDConnection/BDConnection.php';
 
 class post {
-    private int $postID;
+    private int $postId;
     private string $message;
     private int $userID;
     private int $threadID;
@@ -13,9 +13,9 @@ class post {
      * @param int $userID
      * @param int $threadID
      */
-    public function __construct(int $postID, string $message, int $userID, int $threadID)
+    public function __construct(int $postId, string $message, int $userID, int $threadID)
     {
-        $this->postID = $postID;
+        $this->postId = $postId;
         $this->message = $message;
         $this->userID = $userID;
         $this->threadID = $threadID;
@@ -24,17 +24,17 @@ class post {
     /**
      * @return int
      */
-    public function getPostID(): int
+    public function getPostId(): int
     {
-        return $this->postID;
+        return $this->postId;
     }
 
     /**
-     * @param int $postID
+     * @param int $postId
      */
-    public function setPostID(int $postID): void
+    public function setPostId(int $postId): void
     {
-        $this->postID = $postID;
+        $this->postId = $postId;
     }
 
     /**
@@ -112,5 +112,67 @@ function getPostsList($threadID){
         return BDConnection::mensajes($e->getCode());
     }
 }
+
+//UPDATE `posts` SET `message` = 'You\'re welcome!' WHERE `posts`.`postId` = 4
+
+function newPost($message, $userID, $threadID) {
+    try {
+        $connection = BDConnection::ConnectBD();
+
+        if (gettype($connection) == "string") {
+            return $connection;
+        }
+        $sql = "INSERT INTO posts (message, userID, threadID) VALUES (:message,:userID,:threadID)";
+        // Control de inyeccion
+        $response = $connection->prepare($sql);
+
+        $response->execute(array(":message" => $message, ":userID" => $userID, ":threadID" => "$threadID"));
+
+        $connection = null;
+        return  $response;
+    } catch (PDOException $e){
+        return BDConnection::mensajes($e->getCode());
+    }
+}
+
+    function editPost($message, $postID) {
+        try {
+            $connection = BDConnection::ConnectBD();
+
+            if (gettype($connection) == "string") {
+                return $connection;
+            }
+            $sql = "UPDATE posts SET message = :message WHERE postId = :postID";
+            // Control de inyeccion
+            $response = $connection->prepare($sql);
+
+            $response->execute(array(":message" => $message, ":postID" => $postID));
+
+            $connection = null;
+            return  $response;
+        } catch (PDOException $e){
+            return BDConnection::mensajes($e->getCode());
+        }
+    }
+    //"DELETE FROM posts WHERE `posts`.`postId` = 4
+    function deletePost($postID) {
+        try {
+            $connection = BDConnection::ConnectBD();
+
+            if (gettype($connection) == "string") {
+                return $connection;
+            }
+            $sql = "DELETE FROM posts WHERE postId = :postID";
+            // Control de inyeccion
+            $response = $connection->prepare($sql);
+
+            $response->execute(array(":postID" => $postID));
+
+            $connection = null;
+            return  $response;
+        } catch (PDOException $e){
+            return BDConnection::mensajes($e->getCode());
+        }
+    }
 
 }
